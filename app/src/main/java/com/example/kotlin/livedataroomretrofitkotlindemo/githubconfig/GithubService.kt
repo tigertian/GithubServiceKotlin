@@ -1,40 +1,76 @@
 package com.example.kotlin.livedataroomretrofitkotlindemo.githubconfig
 
 import android.text.TextUtils
+import com.example.kotlin.livedataroomretrofitkotlindemo.network.LiveDataCallAdapterFactory
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.String.format
 
 /**
  * Github remote service
  * Created by tianlu on 2017/11/22.
  */
-class GuthubService private constructor(){
+class GithubService private constructor(){
 
     companion object service {
 
-        fun createGithubService(githubToken : String) : GithubApi {
+        var githubServiceLiveData : GithubLiveDataApi? = null
+        var githubServiceRepository : GithubRepositoryApi? = null
 
-            val builder = Retrofit.Builder()
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .baseUrl("https://api.github.com")
 
-            if(!TextUtils.isEmpty(githubToken)){
+        fun createGithubServiceAsLiveData(githubToken : String) : GithubLiveDataApi? {
 
-                val client = OkHttpClient.Builder().addInterceptor({ chain ->
-                    val request = chain.request()
-                    val newReq = request.newBuilder()
-                            .addHeader("Authorization", "token $githubToken")
-                            .build()
-                    chain.proceed(newReq)
+            if(githubServiceLiveData == null){
+                val builder = Retrofit.Builder()
+                        .addCallAdapterFactory(LiveDataCallAdapterFactory())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .baseUrl("https://api.github.com")
 
-                }).build()
+                if(!TextUtils.isEmpty(githubToken)){
 
-                builder.client(client)
+                    val client = OkHttpClient.Builder().addInterceptor({ chain ->
+                        val request = chain.request()
+                        val newReq = request.newBuilder()
+                                .addHeader("Authorization", "token $githubToken")
+                                .build()
+                        chain.proceed(newReq)
+
+                    }).build()
+
+                    builder.client(client)
+                }
+
+                githubServiceLiveData = builder.build().create(GithubLiveDataApi::class.java)
             }
 
-            return builder.build().create(GithubApi::class.java)
+            return githubServiceLiveData
+        }
+
+        fun createGithubServiceAsRepository(githubToken : String) : GithubRepositoryApi? {
+
+            if(githubServiceRepository == null){
+                val builder = Retrofit.Builder()
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .baseUrl("https://api.github.com")
+
+                if(!TextUtils.isEmpty(githubToken)){
+
+                    val client = OkHttpClient.Builder().addInterceptor({ chain ->
+                        val request = chain.request()
+                        val newReq = request.newBuilder()
+                                .addHeader("Authorization", "token $githubToken")
+                                .build()
+                        chain.proceed(newReq)
+
+                    }).build()
+
+                    builder.client(client)
+                }
+                githubServiceRepository = builder.build().create(GithubRepositoryApi::class.java)
+            }
+
+
+            return githubServiceRepository
         }
     }
 }

@@ -39,6 +39,7 @@ ext{
     lifecycleVersion = "1.0.3"
     livedataVersion = "1.0.0"
     roomVersion = "1.0.0"
+    daggarVersion = "2.13"
 }
 
 dependencies {
@@ -54,7 +55,7 @@ dependencies {
     //include android architecture library. LifeCycle, Room, Paging
     //lifecycle
     implementation "android.arch.lifecycle:runtime:${lifecycleVersion}"
-    annotationProcessor "android.arch.lifecycle:compiler:${lifecycleVersion}"
+    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
     //livedata and viewmodel
     implementation "android.arch.lifecycle:extensions:${livedataVersion}"
     implementation "android.arch.lifecycle:reactivestreams:${livedataVersion}"
@@ -69,4 +70,10 @@ dependencies {
     compile "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
 
     compile 'com.google.code.gson:gson:2.8.2'
+
+    compile "com.google.dagger:dagger:${daggarVersion}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${daggarVersion}"
+    compile "com.google.dagger:dagger-android:${daggarVersion}"
+    compile "com.google.dagger:dagger-android-support:${daggarVersion}" // if you use the support libraries
+    annotationProcessor "com.google.dagger:dagger-android-processor:${daggarVersion}"
 }

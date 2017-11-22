@@ -1,13 +1,17 @@
 package com.example.kotlin.livedataroomretrofitkotlindemo
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.example.kotlin.livedataroomretrofitkotlindemo.githubconfig.GithubService
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+
+//Make an alias of type
+typealias Service = GithubService
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,8 +21,23 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+            var githubService = Service.createGithubServiceAsLiveData(resources.getString(R.string.github_access_token))
+
+            githubService!!.getContributors("square", "retrofit").observe(this, Observer{
+                if(it!!.isSuccessful)
+                    for(contributor in it!!.body!!){
+                        println(contributor.login + "=" + contributor.contributions)
+                    }
+            })
+
+            githubService!!.getUser(sample_edittext.text.toString()).observe(this, Observer{
+                if(it!!.isSuccessful){
+                    sample_text.text = "${it!!.body!!.name} = ${it!!.body!!.email}"
+                }else{
+                    sample_text.text = it!!.errorMessage
+                }
+                println(sample_text.text)
+            })
         }
 
         // Example of a call to a native method
