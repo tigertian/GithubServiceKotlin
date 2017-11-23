@@ -18,7 +18,7 @@ class GithubService private constructor(){
         var githubServiceRepository : GithubRepositoryApi? = null
 
 
-        fun createGithubServiceAsLiveData(githubToken : String) : GithubLiveDataApi? {
+        fun createGithubService(githubToken : String) : GithubLiveDataApi? {
 
             if(githubServiceLiveData == null){
                 val builder = Retrofit.Builder()
@@ -46,7 +46,7 @@ class GithubService private constructor(){
             return githubServiceLiveData
         }
 
-        fun createGithubServiceAsRepository(githubToken : String) : GithubRepositoryApi? {
+        fun createGithubServiceRepo(githubToken : String) : GithubRepositoryApi? {
 
             if(githubServiceRepository == null){
                 val builder = Retrofit.Builder()

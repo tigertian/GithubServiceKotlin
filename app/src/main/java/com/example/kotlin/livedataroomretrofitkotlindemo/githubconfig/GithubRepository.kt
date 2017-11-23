@@ -1,11 +1,8 @@
-package com.example.kotlin.livedataroomretrofitkotlindemo.repo
+package com.example.kotlin.livedataroomretrofitkotlindemo.githubconfig
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import com.example.kotlin.livedataroomretrofitkotlindemo.MainApplication
 import com.example.kotlin.livedataroomretrofitkotlindemo.database.UserDao
 import com.example.kotlin.livedataroomretrofitkotlindemo.githubconfig.GithubService
-import com.example.kotlin.livedataroomretrofitkotlindemo.network.ApiResponse
 import com.example.kotlin.livedataroomretrofitkotlindemo.network.User
 import retrofit2.Call
 import retrofit2.Callback
@@ -16,7 +13,6 @@ import java.util.concurrent.Executor
  * Created by tianlu on 2017/11/23.
  */
 class GithubRepository constructor(githubToken : String, userDao : UserDao, exec : Executor)  {
-
 
     val token = githubToken
     val executor = exec
@@ -30,7 +26,7 @@ class GithubRepository constructor(githubToken : String, userDao : UserDao, exec
 
     private fun refreshUser(name : String){
 
-        GithubService.createGithubServiceAsRepository(token)!!.getUser(name)!!.enqueue(object : Callback<User>{
+        GithubService.createGithubServiceRepo(token)!!.getUser(name)!!.enqueue(object : Callback<User>{
             override fun onResponse(call : Call<User>, response : Response<User>){
                 executor.execute({->
                     val count = dao.countByName(response.body()!!.name)
@@ -43,7 +39,7 @@ class GithubRepository constructor(githubToken : String, userDao : UserDao, exec
             }
 
             override fun onFailure(call : Call<User>, throwable : Throwable){
-
+                println(throwable)
             }
         })
 
