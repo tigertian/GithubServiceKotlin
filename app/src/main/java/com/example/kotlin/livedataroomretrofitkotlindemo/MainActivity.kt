@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        //Get the all contributiors' contributions count
+        //Get the all contributors' contributions count
         btnGetContributors.setOnClickListener { view ->
 
             progressbar.visibility = View.VISIBLE
@@ -52,7 +52,6 @@ class MainActivity : AppCompatActivity() {
                 }else{
                     sample_text.text = it?.errorMessage
                 }
-                println(sample_text.text)
             })
         }
 
@@ -60,7 +59,6 @@ class MainActivity : AppCompatActivity() {
         var repo = GithubRepository(resources.getString(R.string.github_access_token), MainApplication.database.userDao(), Executors.newFixedThreadPool(5))
 
         btnGetUserRepo.setOnClickListener{ view ->
-
             progressbar.visibility = View.VISIBLE
             repo.getUser(sample_edittext.text.toString())!!.observe(this, Observer{
                 progressbar.visibility = View.GONE

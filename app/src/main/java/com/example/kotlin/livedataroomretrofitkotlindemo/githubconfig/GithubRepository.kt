@@ -29,11 +29,13 @@ class GithubRepository constructor(githubToken : String, userDao : UserDao, exec
         GithubService.createGithubServiceRepo(token)!!.getUser(name)!!.enqueue(object : Callback<User>{
             override fun onResponse(call : Call<User>, response : Response<User>){
                 executor.execute({->
-                    val count = dao.countByName(response.body()!!.name)
-                    if(count == 0)
-                        dao.createUser(response.body()!!)
-                    else{
-                        dao.updateUser(response.body()!!)
+                    val count = dao.countByName(name)
+                    val user = response.body()!!
+                    user?.name = name
+                    if(count == 0) {
+                        dao.createUser(user)
+                    }else{
+                        dao.updateUser(user)
                     }
                 })
             }
