@@ -1,10 +1,12 @@
 package com.example.kotlin.livedataroomretrofitkotlindemo
 
 import android.arch.lifecycle.Observer
+import android.opengl.Visibility
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.example.kotlin.livedataroomretrofitkotlindemo.githubconfig.GithubService
 
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,19 +22,27 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
+        btnGetContributors.setOnClickListener { view ->
+            progressbar.visibility = View.VISIBLE
             var githubService = Service.createGithubServiceAsLiveData(resources.getString(R.string.github_access_token))
 
             githubService!!.getContributors("square", "retrofit").observe(this, Observer{
+                progressbar.visibility = View.GONE
                 if(it!!.isSuccessful)
                     for(contributor in it!!.body!!){
                         println(contributor.login + "=" + contributor.contributions)
                     }
             })
+        }
+
+        btnGetUser.setOnClickListener { view ->
+            progressbar.visibility = View.VISIBLE
+            var githubService = Service.createGithubServiceAsLiveData(resources.getString(R.string.github_access_token))
 
             githubService!!.getUser(sample_edittext.text.toString()).observe(this, Observer{
+                progressbar.visibility = View.GONE
                 if(it!!.isSuccessful){
-                    sample_text.text = "${it!!.body!!.name} = ${it!!.body!!.email}"
+                    sample_text.text = encodeStringFromJNI(it!!.body!!.name) + " = ${it!!.body!!.email}"
                 }else{
                     sample_text.text = it!!.errorMessage
                 }
@@ -65,6 +75,8 @@ class MainActivity : AppCompatActivity() {
      * which is packaged with this application.
      */
     external fun stringFromJNI(): String
+
+    external fun encodeStringFromJNI(stringNeedToEncode : String): String
 
     companion object {
 

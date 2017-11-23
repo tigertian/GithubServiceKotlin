@@ -1,6 +1,7 @@
 package com.example.kotlin.livedataroomretrofitkotlindemo.network
 
 
+import android.text.TextUtils
 import android.util.Log
 import retrofit2.Response
 import java.io.IOException
@@ -34,7 +35,7 @@ class ApiResponse<T> {
                 }
 
             }
-            if (message == null || message.trim { it <= ' ' }.isEmpty()) {
+            if (TextUtils.isEmpty(message)) {
                 message = response.message()
             }
             errorMessage = message
