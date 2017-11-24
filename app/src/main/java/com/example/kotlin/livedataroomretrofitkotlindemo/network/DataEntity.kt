@@ -14,5 +14,5 @@ data class Contributor(var login : String,
                        var contributions : Long)
 
 @Entity(tableName="users", indices=arrayOf(Index(name="index_name", value="name")))
-data class User(@PrimaryKey @NotNull @ColumnInfo(name = "name") var name : String,
-                @ColumnInfo(name = "email") var email : String)
+data class User(@PrimaryKey @ColumnInfo(name = "name") var name : String,
+                @ColumnInfo(name = "email")  var email : String?)
