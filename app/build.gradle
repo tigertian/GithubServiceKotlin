@@ -39,7 +39,11 @@ ext{
     lifecycleVersion = "1.0.3"
     livedataVersion = "1.0.0"
     roomVersion = "1.0.0"
-    daggarVersion = "2.13"
+    daggerVersion = "2.13"
+}
+
+kapt {
+    generateStubs = true
 }
 
 dependencies {
@@ -56,6 +60,7 @@ dependencies {
     //lifecycle
     implementation "android.arch.lifecycle:runtime:${lifecycleVersion}"
     annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
+    kapt "android.arch.lifecycle:compiler:1.0.0"
     //livedata and viewmodel
     implementation "android.arch.lifecycle:extensions:${livedataVersion}"
     implementation "android.arch.lifecycle:reactivestreams:${livedataVersion}"
@@ -71,11 +76,14 @@ dependencies {
 
     compile 'com.google.code.gson:gson:2.8.2'
 
-    compile "com.google.dagger:dagger:${daggarVersion}"
-    annotationProcessor "com.google.dagger:dagger-compiler:${daggarVersion}"
-    compile "com.google.dagger:dagger-android:${daggarVersion}"
-    compile "com.google.dagger:dagger-android-support:${daggarVersion}" // if you use the support libraries
-    annotationProcessor "com.google.dagger:dagger-android-processor:${daggarVersion}"
+    compile "com.google.dagger:dagger:${daggerVersion}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
+    kapt "com.google.dagger:dagger-compiler:${daggerVersion}"
+    compile "com.google.dagger:dagger-android:${daggerVersion}"
+    compile "com.google.dagger:dagger-android-support:${daggerVersion}" // if you use the support libraries
+    annotationProcessor "com.google.dagger:dagger-android-processor:${daggerVersion}"
+    kapt "com.google.dagger:dagger-android-processor:${daggerVersion}"
+    provided 'org.glassfish:javax.annotation:10.0-b28'
 
     compile 'com.android.support:multidex:1.0.1'
 }

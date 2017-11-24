@@ -1,30 +1,54 @@
 package com.example.kotlin.livedataroomretrofitkotlindemo
 
-import android.arch.lifecycle.Observer
+import android.arch.lifecycle.*
 import android.os.Bundle
+import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.*
 import com.example.kotlin.livedataroomretrofitkotlindemo.githubconfig.GithubService
 import com.example.kotlin.livedataroomretrofitkotlindemo.githubconfig.GithubRepository
+import dagger.Provides
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import com.example.kotlin.livedataroomretrofitkotlindemo.viewmodel.UserViewModel
+import javax.inject.Inject
+
+
 
 //Make an alias of type
 typealias Service = GithubService
 
 class MainActivity : AppCompatActivity() {
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private var activityComponent : ActivityComponent? = null
+
+    fun getActivityComponent(): ActivityComponent? {
+        if (activityComponent == null) {
+            activityComponent = DaggerActivityComponent.builder()
+                    .activityModule(ActivityModule(this))
+                    .applicationComponent(MainApplication.get(this).getComponent())
+                    .build()
+        }
+        return activityComponent
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        getActivityComponent()?.inject(this);
         //Get the all contributors' contributions count
-        btnGetContributors.setOnClickListener { view ->
+        btnGetContributors.setOnClickListener { _ ->
 
             progressbar.visibility = View.VISIBLE
             var githubService = Service.createGithubService(resources.getString(R.string.github_access_token))
@@ -32,14 +56,14 @@ class MainActivity : AppCompatActivity() {
             githubService!!.getContributors("square", "retrofit").observe(this, Observer{
                 progressbar.visibility = View.GONE
                 if(it!!.isSuccessful)
-                    for(contributor in it?.body!!){
+                    for(contributor in it.body!!){
                         println(contributor.login + "=" + contributor.contributions)
                     }
             })
         }
 
         //Get the public email of the user, null if none
-        btnGetUser.setOnClickListener { view ->
+        btnGetUser.setOnClickListener { _ ->
 
             progressbar.visibility = View.VISIBLE
             var githubService = Service.createGithubService(resources.getString(R.string.github_access_token))
@@ -48,19 +72,21 @@ class MainActivity : AppCompatActivity() {
                 progressbar.visibility = View.GONE
                 if(it!!.isSuccessful){
                     //Add the name with 'hello '
-                    sample_text.text = encodeStringFromJNI(it?.body!!.name) + " = ${it?.body!!.email}"
+                    sample_text.text = encodeStringFromJNI(it.body?.name) + " = ${it.body?.email}"
                 }else{
-                    sample_text.text = it?.errorMessage
+                    sample_text.text = it.errorMessage
                 }
             })
         }
 
+        //Repository mode
         //Get the public email of the user, null if none
-        var repo = GithubRepository(resources.getString(R.string.github_access_token), MainApplication.database.userDao(), Executors.newFixedThreadPool(5))
+        var viewModel = ViewModelProviders.of(this, viewModelFactory).get(classOf<UserViewModel>())
 
-        btnGetUserRepo.setOnClickListener{ view ->
+        btnGetUserRepo.setOnClickListener{ _ ->
             progressbar.visibility = View.VISIBLE
-            repo.getUser(sample_edittext.text.toString())!!.observe(this, Observer{
+            viewModel.initUser(sample_edittext.text.toString())
+            viewModel.getUser()?.observe(this, Observer{
                 progressbar.visibility = View.GONE
                 sample_text.text = "${encodeStringFromJNI(it?.name)} = ${it?.email}"
             })
@@ -90,6 +116,7 @@ class MainActivity : AppCompatActivity() {
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
+    private
     external fun stringFromJNI(): String
 
     external fun encodeStringFromJNI(stringNeedToEncode : String?): String

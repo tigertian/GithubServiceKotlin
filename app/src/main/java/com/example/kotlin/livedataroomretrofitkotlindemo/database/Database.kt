@@ -7,7 +7,7 @@ import com.example.kotlin.livedataroomretrofitkotlindemo.network.User
 /**
  * Created by tianlu on 2017/11/17.
  */
-@Database(entities = arrayOf(User::class), version = 2)
+@Database(entities = arrayOf(User::class), version = 2, exportSchema = false)
 abstract class Database : RoomDatabase(){
-    abstract fun userDao() : UserDao
+    abstract fun userDao(): UserDao
 }
