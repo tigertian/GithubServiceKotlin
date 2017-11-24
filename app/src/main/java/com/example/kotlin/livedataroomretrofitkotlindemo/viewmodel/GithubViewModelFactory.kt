@@ -1,12 +1,9 @@
 package com.example.kotlin.livedataroomretrofitkotlindemo.viewmodel
 
 import android.arch.lifecycle.ViewModel
-import javax.inject.Inject
 import android.arch.lifecycle.ViewModelProvider
 import com.example.kotlin.livedataroomretrofitkotlindemo.classOf
-import javax.inject.Provider
-import javax.inject.Singleton
-
+import javax.inject.Inject
 
 
 /**

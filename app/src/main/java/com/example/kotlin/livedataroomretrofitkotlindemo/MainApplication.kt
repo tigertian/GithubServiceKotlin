@@ -7,11 +7,11 @@ package com.example.kotlin.livedataroomretrofitkotlindemo
 import android.app.Application
 import android.content.Context
 import android.support.multidex.MultiDex
-import com.example.kotlin.livedataroomretrofitkotlindemo.database.Database
-import android.arch.persistence.room.Room as RoomDB
 import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.ApplicationComponent
 import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.ApplicationModule
 import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.DaggerApplicationComponent
+import com.example.kotlin.livedataroomretrofitkotlindemo.database.Database
+import android.arch.persistence.room.Room as RoomDB
 
 
 class MainApplication : Application() {

@@ -6,7 +6,6 @@ import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.PerActivity
 import com.example.kotlin.livedataroomretrofitkotlindemo.githubconfig.GithubRepository
 import com.example.kotlin.livedataroomretrofitkotlindemo.network.User
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Created by tianlu on 2017/11/23.

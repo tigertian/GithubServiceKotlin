@@ -11,7 +11,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.concurrent.Executor
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Created by tianlu on 2017/11/23.

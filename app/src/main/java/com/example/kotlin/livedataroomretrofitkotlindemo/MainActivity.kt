@@ -1,25 +1,21 @@
 package com.example.kotlin.livedataroomretrofitkotlindemo
 
-import android.arch.lifecycle.*
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.*
+import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.ActivityComponent
+import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.ActivityModule
+import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.DaggerActivityComponent
 import com.example.kotlin.livedataroomretrofitkotlindemo.githubconfig.GithubService
-import com.example.kotlin.livedataroomretrofitkotlindemo.githubconfig.GithubRepository
-import dagger.Provides
-
+import com.example.kotlin.livedataroomretrofitkotlindemo.viewmodel.UserViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import com.example.kotlin.livedataroomretrofitkotlindemo.viewmodel.UserViewModel
 import javax.inject.Inject
-
-
 
 //Make an alias of type
 typealias Service = GithubService
