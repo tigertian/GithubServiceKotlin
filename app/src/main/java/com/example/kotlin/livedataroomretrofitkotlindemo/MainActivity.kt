@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity() {
         //Inject this activity
         getActivityComponent()?.inject(this);
 
-
         //Get the all contributors' contributions count
         btnGetContributors.setOnClickListener { _ ->
 
@@ -94,10 +93,8 @@ class MainActivity : AppCompatActivity() {
         //Repository injection mode
         //Get the public email of the user, null if none
         var viewModel = ViewModelProviders.of(this, viewModelFactory).get(classOf<UserViewModel>())
-
         btnGetUserRepo.setOnClickListener{ _ ->
             progressbar.visibility = View.VISIBLE
-
             viewModel.initUser(sample_edittext.text.toString())
             viewModel.getUser()?.observe(this, Observer{
                 when(it?.status){

@@ -2,6 +2,7 @@ package com.example.kotlin.livedataroomretrofitkotlindemo.githubconfig
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
+import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.GithubTokenQualifier
 import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.PerActivity
 import com.example.kotlin.livedataroomretrofitkotlindemo.database.UserDao
 import com.example.kotlin.livedataroomretrofitkotlindemo.network.Resource
@@ -25,8 +26,7 @@ class GithubRepository  {
 
     @Inject
     constructor(
-                //@GithubTokenQualifier
-                githubToken : String,
+                @GithubTokenQualifier githubToken : String,
                 userDao : UserDao,
                 exec : Executor){
         token = githubToken

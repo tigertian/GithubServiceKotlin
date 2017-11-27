@@ -38,7 +38,7 @@ class ActivityModule(private val mActivity: Activity) {
     }
 
     @Provides
-//    @GithubTokenQualifier
+    @GithubTokenQualifier
     fun provideGithubToken() : String {
         return mActivity.getString(R.string.github_access_token)
     }
