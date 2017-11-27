@@ -1,10 +1,9 @@
 package com.example.kotlin.livedataroomretrofitkotlindemo.network
 
-
 /**
+ * Generic class that describes a data with a status
  * Created by tianlu on 2017/11/27.
  */
-//a generic class that describes a data with a status
 class Resource<T> private constructor(val status: Status, val data: T?, val message: String?) {
     companion object {
 

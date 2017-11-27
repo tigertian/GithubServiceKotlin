@@ -2,7 +2,7 @@ package com.example.kotlin.livedataroomretrofitkotlindemo.viewmodel
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import com.example.kotlin.livedataroomretrofitkotlindemo.classOf
+import com.example.kotlin.livedataroomretrofitkotlindemo.utils.classOf
 import javax.inject.Inject
 
 

@@ -11,6 +11,7 @@ import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.ApplicationComp
 import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.ApplicationModule
 import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.DaggerApplicationComponent
 import com.example.kotlin.livedataroomretrofitkotlindemo.database.Database
+import com.example.kotlin.livedataroomretrofitkotlindemo.utils.classOf
 import android.arch.persistence.room.Room as RoomDB
 
 

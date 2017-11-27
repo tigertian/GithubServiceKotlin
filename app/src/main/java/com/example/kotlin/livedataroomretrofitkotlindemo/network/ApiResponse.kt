@@ -1,6 +1,5 @@
 package com.example.kotlin.livedataroomretrofitkotlindemo.network
 
-
 import android.text.TextUtils
 import android.util.Log
 import retrofit2.Response

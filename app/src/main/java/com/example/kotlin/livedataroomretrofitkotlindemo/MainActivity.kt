@@ -15,6 +15,9 @@ import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.ActivityModule
 import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.DaggerActivityComponent
 import com.example.kotlin.livedataroomretrofitkotlindemo.githubconfig.GithubService
 import com.example.kotlin.livedataroomretrofitkotlindemo.network.Status
+import com.example.kotlin.livedataroomretrofitkotlindemo.network.User
+import com.example.kotlin.livedataroomretrofitkotlindemo.utils.DateUtils
+import com.example.kotlin.livedataroomretrofitkotlindemo.utils.classOf
 import com.example.kotlin.livedataroomretrofitkotlindemo.viewmodel.UserViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -65,7 +68,7 @@ class MainActivity : AppCompatActivity() {
                             .setMessage(text)
                             .setCancelable(true)
                             .setPositiveButton(R.string.btn_sure
-                                    , DialogInterface.OnClickListener{ dialog, idx ->
+                                    , DialogInterface.OnClickListener{ dialog, _ ->
                                         dialog.dismiss()
                                     })
                             .create().show()
@@ -74,45 +77,76 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
-        //Get the public email of the user, null if none
+        //Get the public information of the user, null if none
         btnGetUser.setOnClickListener { _ ->
             progressbar.visibility = View.VISIBLE
 
             var githubService = Service.createGithubService(resources.getString(R.string.github_access_token))
-            githubService!!.getUser(sample_edittext.text.toString()).observe(this, Observer{
+            githubService!!.getUser(edittext_name.text.toString()).observe(this, Observer{
                 progressbar.visibility = View.GONE
                 if(it!!.isSuccessful){
                     //Add the name with 'hello '
-                    sample_text.text = encodeStringFromJNI(it.body?.name) + " = ${it.body?.email}"
+                    sample_text.text = getUserInfo(it.body!!)
                 }else{
                     sample_text.text = it.errorMessage
                 }
             })
         }
 
-        //Repository injection mode
-        //Get the public email of the user, null if none
+        //Get the public information of the user, null if none in repository injection mode
         var viewModel = ViewModelProviders.of(this, viewModelFactory).get(classOf<UserViewModel>())
         btnGetUserRepo.setOnClickListener{ _ ->
             progressbar.visibility = View.VISIBLE
-            viewModel.initUser(sample_edittext.text.toString())
+            viewModel.initUser(edittext_name.text.toString())
             viewModel.getUser()?.observe(this, Observer{
                 when(it?.status){
                     Status.SUCCESS -> {
                         progressbar.visibility = View.GONE
-                        sample_text.text = "${encodeStringFromJNI(it!!.data?.name)} = ${it!!.data?.email}"
+                        sample_text.text = getUserInfo(it.data!!)
                     }
                     Status.ERROR -> {
                         progressbar.visibility = View.GONE
-                        sample_text.text = it!!.message
+                        sample_text.text = it.message
                     }
+                    Status.LOADING -> {}
                 }
+            })
+        }
 
+        //Update the current user's email
+        btnUpdateUser.setOnClickListener{_ ->
+            progressbar.visibility = View.VISIBLE
+
+            var githubService = Service.createGithubService(resources.getString(R.string.github_access_token))
+            githubService!!.getUser(resources.getString(R.string.github_access_name)).observe(this, Observer{
+
+                if(it!!.isSuccessful){
+                    var user = it.body!!
+                    user.email = edittext_email.text.toString()
+                    githubService!!.updateUser(user).observe(this, Observer {
+                        progressbar.visibility = View.GONE
+                        if(it!!.isSuccessful){
+                        //Add the name with 'hello '
+                            sample_text.text = getUserInfo(it.body!!)
+                        }else{
+                            sample_text.text = it.errorMessage
+                        }
+                    })
+                }else{
+                    progressbar.visibility = View.GONE
+                    sample_text.text = it.errorMessage
+                }
             })
         }
 
         // Example of a call to a native method
         sample_text.text = stringFromJNI()
+    }
+
+    fun getUserInfo(user : User) : String{
+        return String.format(resources.getString(R.string.user_info),
+                encodeStringFromJNI(user.name), user.type, user.email, user.location, user.company,
+                DateUtils.format(user.created_at!!, DateUtils.DateFormatType.YYYY_MM_DD_T_HH_MM_SS_Z))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

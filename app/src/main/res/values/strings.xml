@@ -2,5 +2,7 @@
     <string name="app_name">LiveDataRoomRetrofitKotlinDemo</string>
     <string name="action_settings">Settings</string>
     <string name="github_access_token"></string>
+    <string name="github_access_name">tigertian</string>
     <string name="btn_sure">确定</string>
+    <string name="user_info">%s\ntype: %s\nemail: %s\nlocation: %s\ncompany: %s\ncreated at: %s\n</string>
 </resources>

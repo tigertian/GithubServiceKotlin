@@ -20,32 +20,23 @@
         android:max="100"
         android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/sample_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/progressbar"
-        android:gravity="center"
-        android:text="Hello World!"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
-        android:background="@drawable/top_border_set"/>
-
     <LinearLayout
         android:id="@+id/llGetUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_below="@+id/sample_text"
+        android:layout_below="@+id/progressbar"
         android:orientation="horizontal"
         android:background="@drawable/top_border_set">
 
         <EditText
-            android:id="@+id/sample_edittext"
+            android:id="@+id/edittext_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/progressbar"
-            android:text="tigertian"
+            android:text="@string/github_access_name"
+            android:hint="Github name"
+            android:singleLine="true"
             android:layout_weight="1"/>
 
         <Button
@@ -63,9 +54,36 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/llUpdateUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_below="@+id/llGetUser"
+        android:orientation="horizontal"
+        android:background="@drawable/top_border_set">
+
+        <EditText
+            android:id="@+id/edittext_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/progressbar"
+            android:text="13921448038@139.com"
+            android:singleLine="true"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btnUpdateUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Update" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llTools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llUpdateUser"
         android:orientation="horizontal"
         android:background="@drawable/top_border_set">
 
@@ -76,4 +94,13 @@
             android:text="ContributorsLD" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/sample_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llTools"
+        android:text="Hello World!"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:background="@drawable/top_border_set"/>
 </RelativeLayout>

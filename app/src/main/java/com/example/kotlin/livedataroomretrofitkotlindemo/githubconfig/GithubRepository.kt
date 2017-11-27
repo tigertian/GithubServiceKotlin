@@ -25,8 +25,7 @@ class GithubRepository  {
     var data = MediatorLiveData<Resource<User>>()
 
     @Inject
-    constructor(
-                @GithubTokenQualifier githubToken : String,
+    constructor(@GithubTokenQualifier githubToken : String,
                 userDao : UserDao,
                 exec : Executor){
         token = githubToken

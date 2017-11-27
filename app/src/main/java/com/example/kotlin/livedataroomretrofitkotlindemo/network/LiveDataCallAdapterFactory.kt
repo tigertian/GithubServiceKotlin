@@ -1,6 +1,5 @@
 package com.example.kotlin.livedataroomretrofitkotlindemo.network
 
-
 import android.arch.lifecycle.LiveData
 import retrofit2.CallAdapter
 import retrofit2.Retrofit

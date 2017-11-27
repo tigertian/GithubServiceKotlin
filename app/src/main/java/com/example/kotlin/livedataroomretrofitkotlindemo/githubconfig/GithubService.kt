@@ -2,6 +2,7 @@ package com.example.kotlin.livedataroomretrofitkotlindemo.githubconfig
 
 import android.text.TextUtils
 import com.example.kotlin.livedataroomretrofitkotlindemo.network.LiveDataCallAdapterFactory
+import com.example.kotlin.livedataroomretrofitkotlindemo.utils.JsonManager
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -23,7 +24,7 @@ class GithubService private constructor(){
             if(githubServiceLiveData == null){
                 val builder = Retrofit.Builder()
                         .addCallAdapterFactory(LiveDataCallAdapterFactory())
-                        .addConverterFactory(GsonConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create(JsonManager.gson))
                         .baseUrl("https://api.github.com")
 
                 if(!TextUtils.isEmpty(githubToken)){
@@ -50,7 +51,7 @@ class GithubService private constructor(){
 
             if(githubServiceRepository == null){
                 val builder = Retrofit.Builder()
-                        .addConverterFactory(GsonConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create(JsonManager.gson))
                         .baseUrl("https://api.github.com")
 
                 if(!TextUtils.isEmpty(githubToken)){

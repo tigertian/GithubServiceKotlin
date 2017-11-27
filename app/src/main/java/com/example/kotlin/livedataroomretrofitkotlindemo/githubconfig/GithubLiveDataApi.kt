@@ -4,7 +4,9 @@ import android.arch.lifecycle.LiveData
 import com.example.kotlin.livedataroomretrofitkotlindemo.network.ApiResponse
 import com.example.kotlin.livedataroomretrofitkotlindemo.network.Contributor
 import com.example.kotlin.livedataroomretrofitkotlindemo.network.User
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.Path
 
 /**
@@ -25,4 +27,10 @@ interface GithubLiveDataApi{
      */
     @GET("/users/{user}")
     fun getUser(@Path("user") user : String) : LiveData<ApiResponse<User>>
+
+    /**
+     * See https://developer.github.com/v3/users/
+     */
+    @PATCH("/user")
+    fun updateUser(@Body user : User) : LiveData<ApiResponse<User>>
 }
