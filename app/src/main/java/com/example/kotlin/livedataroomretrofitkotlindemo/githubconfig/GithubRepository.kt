@@ -1,10 +1,10 @@
 package com.example.kotlin.livedataroomretrofitkotlindemo.githubconfig
 
 import android.arch.lifecycle.LiveData
-import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.ExecutorQualifier
-import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.GithubTokenQualifier
+import android.arch.lifecycle.MediatorLiveData
 import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.PerActivity
 import com.example.kotlin.livedataroomretrofitkotlindemo.database.UserDao
+import com.example.kotlin.livedataroomretrofitkotlindemo.network.Resource
 import com.example.kotlin.livedataroomretrofitkotlindemo.network.User
 import retrofit2.Call
 import retrofit2.Callback
@@ -21,20 +21,28 @@ class GithubRepository  {
     var token : String? = null
     var dao : UserDao? = null
     var executor : Executor? = null
+    var data = MediatorLiveData<Resource<User>>()
 
     @Inject
-    constructor(@GithubTokenQualifier githubToken : String,
+    constructor(
+                //@GithubTokenQualifier
+                githubToken : String,
                 userDao : UserDao,
-                @ExecutorQualifier exec : Executor){
+                exec : Executor){
         token = githubToken
         dao = userDao
         executor = exec
     }
 
-    fun getUser(name : String) : LiveData<User>? {
+    fun getUser(name : String) : LiveData<Resource<User>>? {
+        var user = dao?.findByName(name)
+        if(user != null)
+            data.value = Resource.success(user)
+        else
+            data.value = Resource.loading(null)
         refreshUser(name)
 
-        return dao?.findByName(name)
+        return data
     }
 
     private fun refreshUser(name : String){
@@ -51,11 +59,13 @@ class GithubRepository  {
                     }else{
                         dao?.updateUser(user)
                     }
+
+                    data.postValue(Resource.success(user))
                 })
             }
 
             override fun onFailure(call : Call<User>, throwable : Throwable){
-                println(throwable)
+                data.postValue(Resource.error(throwable.message + "", null))
             }
         })
 

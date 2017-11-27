@@ -23,10 +23,10 @@ interface UserDao {
     fun deleteUser(user: User)
 
     @Query("SELECT * FROM users where name = :name")
-    fun findUsersByName(name: String): LiveData<List<User>>
+    fun findUsersByName(name: String): LiveData<List<User?>>
 
     @Query("SELECT * FROM users where name = :name limit 1")
-    fun findByName(name: String): LiveData<User>
+    fun findByName(name: String): User?
 
     @Query("SELECT count(*) FROM users where name = :name")
     fun countByName(name: String): Int

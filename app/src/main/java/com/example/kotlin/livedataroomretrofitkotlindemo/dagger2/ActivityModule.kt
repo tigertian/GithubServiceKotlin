@@ -38,13 +38,12 @@ class ActivityModule(private val mActivity: Activity) {
     }
 
     @Provides
-    @GithubTokenQualifier
+//    @GithubTokenQualifier
     fun provideGithubToken() : String {
         return mActivity.getString(R.string.github_access_token)
     }
 
     @Provides
-    @ExecutorQualifier
     fun provideExecutors() : Executor {
         return Executors.newFixedThreadPool(5)
     }

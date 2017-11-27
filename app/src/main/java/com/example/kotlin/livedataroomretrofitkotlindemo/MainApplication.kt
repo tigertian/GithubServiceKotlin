@@ -30,7 +30,7 @@ class MainApplication : Application() {
         super.onCreate()
 
         database = RoomDB.databaseBuilder(this, classOf<Database>(), "room_sample.db")
-                //.allowMainThreadQueries() //Allowed to run on the main thread
+                .allowMainThreadQueries() //Allowed to run on the main thread
                 //.fallbackToDestructiveMigration() //Allowed to fallback on migration failed
                 .build()
 

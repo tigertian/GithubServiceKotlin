@@ -1,8 +1,10 @@
 package com.example.kotlin.livedataroomretrofitkotlindemo
 
+import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
@@ -12,6 +14,7 @@ import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.ActivityCompone
 import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.ActivityModule
 import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.DaggerActivityComponent
 import com.example.kotlin.livedataroomretrofitkotlindemo.githubconfig.GithubService
+import com.example.kotlin.livedataroomretrofitkotlindemo.network.Status
 import com.example.kotlin.livedataroomretrofitkotlindemo.viewmodel.UserViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -42,7 +45,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        //Inject this activity
         getActivityComponent()?.inject(this);
+
+
         //Get the all contributors' contributions count
         btnGetContributors.setOnClickListener { _ ->
 
@@ -51,19 +57,29 @@ class MainActivity : AppCompatActivity() {
 
             githubService!!.getContributors("square", "retrofit").observe(this, Observer{
                 progressbar.visibility = View.GONE
-                if(it!!.isSuccessful)
+                if(it!!.isSuccessful){
+                    var text = ""
                     for(contributor in it.body!!){
-                        println(contributor.login + "=" + contributor.contributions)
+                        text += "${contributor.login}=${contributor.contributions}\r\n"
                     }
+                    AlertDialog.Builder(this)
+                            .setMessage(text)
+                            .setCancelable(true)
+                            .setPositiveButton(R.string.btn_sure
+                                    , DialogInterface.OnClickListener{ dialog, idx ->
+                                        dialog.dismiss()
+                                    })
+                            .create().show()
+                }
+
             })
         }
 
         //Get the public email of the user, null if none
         btnGetUser.setOnClickListener { _ ->
-
             progressbar.visibility = View.VISIBLE
-            var githubService = Service.createGithubService(resources.getString(R.string.github_access_token))
 
+            var githubService = Service.createGithubService(resources.getString(R.string.github_access_token))
             githubService!!.getUser(sample_edittext.text.toString()).observe(this, Observer{
                 progressbar.visibility = View.GONE
                 if(it!!.isSuccessful){
@@ -75,16 +91,26 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
-        //Repository mode
+        //Repository injection mode
         //Get the public email of the user, null if none
         var viewModel = ViewModelProviders.of(this, viewModelFactory).get(classOf<UserViewModel>())
 
         btnGetUserRepo.setOnClickListener{ _ ->
             progressbar.visibility = View.VISIBLE
+
             viewModel.initUser(sample_edittext.text.toString())
             viewModel.getUser()?.observe(this, Observer{
-                progressbar.visibility = View.GONE
-                sample_text.text = "${encodeStringFromJNI(it?.name)} = ${it?.email}"
+                when(it?.status){
+                    Status.SUCCESS -> {
+                        progressbar.visibility = View.GONE
+                        sample_text.text = "${encodeStringFromJNI(it!!.data?.name)} = ${it!!.data?.email}"
+                    }
+                    Status.ERROR -> {
+                        progressbar.visibility = View.GONE
+                        sample_text.text = it!!.message
+                    }
+                }
+
             })
         }
 
@@ -112,10 +138,9 @@ class MainActivity : AppCompatActivity() {
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-    private
-    external fun stringFromJNI(): String
+    private external fun stringFromJNI(): String
 
-    external fun encodeStringFromJNI(stringNeedToEncode : String?): String
+    private external fun encodeStringFromJNI(stringNeedToEncode : String?): String
 
     companion object {
 

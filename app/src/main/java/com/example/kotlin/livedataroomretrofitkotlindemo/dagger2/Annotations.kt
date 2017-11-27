@@ -11,9 +11,6 @@ import javax.inject.Scope
 annotation class GithubTokenQualifier
 
 @Qualifier
-annotation class ExecutorQualifier
-
-@Qualifier
 @Retention
 annotation class ActivityContext
 
