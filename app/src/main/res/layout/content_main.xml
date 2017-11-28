@@ -20,87 +20,153 @@
         android:max="100"
         android:visibility="gone" />
 
-    <LinearLayout
-        android:id="@+id/llGetUser"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_below="@+id/progressbar"
-        android:orientation="horizontal"
-        android:background="@drawable/top_border_set">
+        android:scrollbars="vertical">
 
-        <EditText
-            android:id="@+id/edittext_name"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/progressbar"
-            android:text="@string/github_access_name"
-            android:hint="Github name"
-            android:singleLine="true"
-            android:layout_weight="1"/>
+            android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/btnGetUser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="UserEmailLD" />
+            <LinearLayout
+                android:id="@+id/llGetUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/top_border_set"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btnGetUserRepo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="UserEmailR" />
+                <EditText
+                    android:id="@+id/edittext_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Github name"
+                    android:singleLine="true"
+                    android:text="@string/github_access_name"
+                    android:focusedByDefault="false"/>
 
-    </LinearLayout>
+                <Button
+                    android:id="@+id/btnGetUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email_LD" />
 
-    <LinearLayout
-        android:id="@+id/llUpdateUser"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_below="@+id/llGetUser"
-        android:orientation="horizontal"
-        android:background="@drawable/top_border_set">
+                <Button
+                    android:id="@+id/btnGetUserRepo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email_R" />
 
-        <EditText
-            android:id="@+id/edittext_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/progressbar"
-            android:text="13921448038@139.com"
-            android:singleLine="true"
-            android:layout_weight="1"/>
+            </LinearLayout>
 
-        <Button
-            android:id="@+id/btnUpdateUser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Update" />
+            <LinearLayout
+                android:id="@+id/llUpdateUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/llGetUser"
+                android:background="@drawable/top_border_set"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/edittext_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/progressbar"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:text="13921448038@139.com"
+                    android:focusedByDefault="false"/>
 
-    <LinearLayout
-        android:id="@+id/llTools"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/llUpdateUser"
-        android:orientation="horizontal"
-        android:background="@drawable/top_border_set">
+                <Button
+                    android:id="@+id/btnUpdateUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Update" />
 
-        <Button
-            android:id="@+id/btnGetContributors"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ContributorsLD" />
-    </LinearLayout>
+            </LinearLayout>
 
-    <TextView
-        android:id="@+id/sample_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/llTools"
-        android:text="Hello World!"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
-        android:background="@drawable/top_border_set"/>
+            <TextView
+                android:id="@+id/text_userinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/llUpdateUser"
+                android:text="Hello World!"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:layout_marginTop="5dip"
+                android:layout_marginBottom="5dip"/>
+
+            <include layout="@layout/splitter"
+                android:id="@+id/splitter_user"
+                android:layout_width="match_parent"
+                android:layout_height="2dip"
+                android:layout_below="@id/text_userinfo" />
+
+            <LinearLayout
+                android:id="@+id/llTools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/splitter_user"
+                android:background="@drawable/top_border_set"
+                android:orientation="horizontal">
+
+
+                <Button
+                    android:id="@+id/btnGetContributors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Contributors_LD" />
+
+            </LinearLayout>
+
+            <include layout="@layout/splitter"
+                android:id="@+id/splitter_tools"
+                android:layout_width="match_parent"
+                android:layout_height="2dip"
+                android:layout_below="@id/llTools" />
+
+
+            <LinearLayout
+                android:id="@+id/llGetSubs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/splitter_tools"
+                android:background="@drawable/top_border_set"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/edittext_subname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Github name"
+                    android:singleLine="true"
+                    android:text="@string/github_access_name"
+                    android:focusedByDefault="false"/>
+
+                <Button
+                    android:id="@+id/btnGetSubs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subscriptions_LD" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/text_subscriptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/llGetSubs"
+                android:text="Hello World!"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:layout_marginTop="5dip"
+                android:layout_marginBottom="5dip"/>
+
+        </RelativeLayout>
+    </ScrollView>
+
 </RelativeLayout>

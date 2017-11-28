@@ -1,6 +1,7 @@
-package com.example.kotlin.livedataroomretrofitkotlindemo.githubconfig
+package com.example.kotlin.livedataroomretrofitkotlindemo.network.githubconfig
 
 import com.example.kotlin.livedataroomretrofitkotlindemo.network.Contributor
+import com.example.kotlin.livedataroomretrofitkotlindemo.network.Subscription
 import com.example.kotlin.livedataroomretrofitkotlindemo.network.User
 import retrofit2.Call
 import retrofit2.http.GET
@@ -24,4 +25,10 @@ interface GithubRepositoryApi {
      */
     @GET("/users/{user}")
     fun getUser(@Path("user") user : String) : Call<User>
+
+    /**
+     * See https://developer.github.com/v3/activity/watching/#list-repositories-being-watched
+     */
+    @GET("/users/{username}/subscriptions")
+    fun getOwnSubscriptions(@Path("username") username : String) : Call<List<Subscription>>
 }

@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
 import com.example.kotlin.livedataroomretrofitkotlindemo.MainApplication
 import com.example.kotlin.livedataroomretrofitkotlindemo.R
+import com.example.kotlin.livedataroomretrofitkotlindemo.database.Database
 import com.example.kotlin.livedataroomretrofitkotlindemo.database.UserDao
 import com.example.kotlin.livedataroomretrofitkotlindemo.viewmodel.GithubViewModelFactory
 import dagger.Module
@@ -51,5 +52,10 @@ class ActivityModule(private val mActivity: Activity) {
     @Provides
     fun provideUserDao() : UserDao{
         return MainApplication.database.userDao()
+    }
+
+    @Provides
+    fun provideDatabase() : Database{
+        return MainApplication.database
     }
 }

@@ -1,7 +1,7 @@
 package com.example.kotlin.livedataroomretrofitkotlindemo.network
 
 /**
- * Generic class that describes a data with a status
+ * Generic class that describes a dataUser with a status
  * Created by tianlu on 2017/11/27.
  */
 class Resource<T> private constructor(val status: Status, val data: T?, val message: String?) {
@@ -19,10 +19,11 @@ class Resource<T> private constructor(val status: Status, val data: T?, val mess
             return Resource(Status.LOADING, data, null)
         }
     }
+
+    enum class Status{
+        SUCCESS,
+        ERROR,
+        LOADING
+    }
 }
 
-enum class Status{
-    SUCCESS,
-    ERROR,
-    LOADING
-}

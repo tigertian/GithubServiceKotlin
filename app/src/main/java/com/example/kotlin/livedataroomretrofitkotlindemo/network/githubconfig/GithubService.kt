@@ -1,4 +1,4 @@
-package com.example.kotlin.livedataroomretrofitkotlindemo.githubconfig
+package com.example.kotlin.livedataroomretrofitkotlindemo.network.githubconfig
 
 import android.text.TextUtils
 import com.example.kotlin.livedataroomretrofitkotlindemo.network.LiveDataCallAdapterFactory

@@ -13,9 +13,9 @@ import android.view.View
 import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.ActivityComponent
 import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.ActivityModule
 import com.example.kotlin.livedataroomretrofitkotlindemo.dagger2.DaggerActivityComponent
-import com.example.kotlin.livedataroomretrofitkotlindemo.githubconfig.GithubService
-import com.example.kotlin.livedataroomretrofitkotlindemo.network.Status
+import com.example.kotlin.livedataroomretrofitkotlindemo.network.Resource.Status
 import com.example.kotlin.livedataroomretrofitkotlindemo.network.User
+import com.example.kotlin.livedataroomretrofitkotlindemo.network.githubconfig.GithubService
 import com.example.kotlin.livedataroomretrofitkotlindemo.utils.DateUtils
 import com.example.kotlin.livedataroomretrofitkotlindemo.utils.classOf
 import com.example.kotlin.livedataroomretrofitkotlindemo.viewmodel.UserViewModel
@@ -51,6 +51,59 @@ class MainActivity : AppCompatActivity() {
         //Inject this activity
         getActivityComponent()?.inject(this);
 
+        //Example of a call to a native method
+        text_userinfo.text = stringFromJNI()
+
+        //Bind the controls
+        initControls()
+    }
+
+    fun initControls(){
+
+        var viewModel = ViewModelProviders.of(this, viewModelFactory).get(classOf<UserViewModel>())
+
+        //Get the public information of the user, null if none in repository injection mode
+        btnGetUserRepo.setOnClickListener{ _ ->
+            progressbar.visibility = View.VISIBLE
+            viewModel.initUser(edittext_name.text.toString())
+            viewModel.getUser()?.observe(this, Observer{
+                when(it?.status){
+                    Status.SUCCESS -> {
+                        progressbar.visibility = View.GONE
+                        text_userinfo.text = getUserInfo(it.data!!)
+                    }
+                    Status.ERROR -> {
+                        progressbar.visibility = View.GONE
+                        text_userinfo.text = it.message
+                    }
+                    Status.LOADING -> {}
+                }
+            })
+        }
+
+        btnGetSubs.setOnClickListener{_ ->
+            progressbar.visibility = View.VISIBLE
+            viewModel.initSubscriptions(edittext_subname.text.toString())
+            viewModel.getSubscriptions()?.observe(this, Observer{
+                when(it?.status){
+                    Status.SUCCESS -> {
+                        var text = ""
+                        it.data!!.forEach {
+                            text += "${it.name}(${it.owner?.login})=${it.url}\n"
+                        }
+
+                        progressbar.visibility = View.GONE
+                        text_subscriptions.text = text
+                    }
+                    Status.ERROR -> {
+                        progressbar.visibility = View.GONE
+                        text_subscriptions.text = it.message
+                    }
+                    Status.LOADING -> {}
+                }
+            })
+        }
+
         //Get the all contributors' contributions count
         btnGetContributors.setOnClickListener { _ ->
 
@@ -69,8 +122,8 @@ class MainActivity : AppCompatActivity() {
                             .setCancelable(true)
                             .setPositiveButton(R.string.btn_sure
                                     , DialogInterface.OnClickListener{ dialog, _ ->
-                                        dialog.dismiss()
-                                    })
+                                dialog.dismiss()
+                            })
                             .create().show()
                 }
 
@@ -85,30 +138,9 @@ class MainActivity : AppCompatActivity() {
             githubService!!.getUser(edittext_name.text.toString()).observe(this, Observer{
                 progressbar.visibility = View.GONE
                 if(it!!.isSuccessful){
-                    //Add the name with 'hello '
-                    sample_text.text = getUserInfo(it.body!!)
+                    text_userinfo.text = getUserInfo(it.body!!)
                 }else{
-                    sample_text.text = it.errorMessage
-                }
-            })
-        }
-
-        //Get the public information of the user, null if none in repository injection mode
-        var viewModel = ViewModelProviders.of(this, viewModelFactory).get(classOf<UserViewModel>())
-        btnGetUserRepo.setOnClickListener{ _ ->
-            progressbar.visibility = View.VISIBLE
-            viewModel.initUser(edittext_name.text.toString())
-            viewModel.getUser()?.observe(this, Observer{
-                when(it?.status){
-                    Status.SUCCESS -> {
-                        progressbar.visibility = View.GONE
-                        sample_text.text = getUserInfo(it.data!!)
-                    }
-                    Status.ERROR -> {
-                        progressbar.visibility = View.GONE
-                        sample_text.text = it.message
-                    }
-                    Status.LOADING -> {}
+                    text_userinfo.text = it.errorMessage
                 }
             })
         }
@@ -121,26 +153,27 @@ class MainActivity : AppCompatActivity() {
             githubService!!.getUser(resources.getString(R.string.github_access_name)).observe(this, Observer{
 
                 if(it!!.isSuccessful){
-                    var user = it.body!!
-                    user.email = edittext_email.text.toString()
-                    githubService!!.updateUser(user).observe(this, Observer {
+                    var user = it.body
+                    if(user != null){
+                        user.email = edittext_email.text.toString()
+                        githubService.updateUser(user).observe(this, Observer {
+                            progressbar.visibility = View.GONE
+                            if(it!!.isSuccessful){
+                                text_userinfo.text = getUserInfo(it.body!!)
+                            }else{
+                                text_userinfo.text = it.errorMessage
+                            }
+                        })
+                    }else{
                         progressbar.visibility = View.GONE
-                        if(it!!.isSuccessful){
-                        //Add the name with 'hello '
-                            sample_text.text = getUserInfo(it.body!!)
-                        }else{
-                            sample_text.text = it.errorMessage
-                        }
-                    })
+                    }
                 }else{
                     progressbar.visibility = View.GONE
-                    sample_text.text = it.errorMessage
+                    text_userinfo.text = it.errorMessage
                 }
             })
         }
 
-        // Example of a call to a native method
-        sample_text.text = stringFromJNI()
     }
 
     fun getUserInfo(user : User) : String{

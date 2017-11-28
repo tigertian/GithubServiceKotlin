@@ -2,6 +2,8 @@ package com.example.kotlin.livedataroomretrofitkotlindemo.database
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
+import com.example.kotlin.livedataroomretrofitkotlindemo.network.Owner
+import com.example.kotlin.livedataroomretrofitkotlindemo.network.Subscription
 import com.example.kotlin.livedataroomretrofitkotlindemo.network.User
 
 /**
@@ -10,11 +12,13 @@ import com.example.kotlin.livedataroomretrofitkotlindemo.network.User
 @Dao
 interface UserDao {
 
+    //Users
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun createUser(user: User)
 
     @Query("SELECT * FROM users")
-    fun findAll(): List<User>
+    fun findAllUsers(): List<User>
 
     @Update
     fun updateUser(user: User)
@@ -23,12 +27,46 @@ interface UserDao {
     fun deleteUser(user: User)
 
     @Query("SELECT * FROM users where name = :name")
-    fun findUsersByName(name: String): LiveData<List<User?>>
+    fun findUsersByName(name: String): LiveData<List<User>>
 
     @Query("SELECT * FROM users where name = :name limit 1")
-    fun findByName(name: String): User?
+    fun findUserByName(name: String): User?
 
-    @Query("SELECT count(*) FROM users where name = :name")
-    fun countByName(name: String): Int
+    //Subscriptions
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun createSubscription(sub: Subscription)
+
+    @Query("SELECT * FROM subscriptions")
+    fun findAllSubcriptions(): List<Subscription>
+
+    @Update
+    fun updateSubscription(sub: Subscription)
+
+    @Delete
+    fun deleteSubscription(sub: Subscription)
+
+    @Query("SELECT * FROM subscriptions where username = :username")
+    fun findSubscriptionsByUsername(username : String): List<Subscription>
+
+    @Query("SELECT * FROM subscriptions where id = :id limit 1")
+    fun findSubscriptionById(id : Int): Subscription?
+
+    //Owners
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun createOwner(owner: Owner)
+
+    @Query("SELECT * FROM owners")
+    fun findAllOwners(): List<Owner>
+
+    @Update
+    fun updateOwner(owner: Owner)
+
+    @Delete
+    fun deleteOwner(owner: Owner)
+
+    @Query("SELECT * FROM owners where id = :id")
+    fun findOwnerById(id : Int): Owner?
 
 }
