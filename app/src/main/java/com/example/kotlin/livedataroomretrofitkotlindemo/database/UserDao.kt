@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import com.example.kotlin.livedataroomretrofitkotlindemo.network.Owner
 import com.example.kotlin.livedataroomretrofitkotlindemo.network.Subscription
+import com.example.kotlin.livedataroomretrofitkotlindemo.network.SubscriptionWithOwner
 import com.example.kotlin.livedataroomretrofitkotlindemo.network.User
 
 /**
@@ -51,6 +52,9 @@ interface UserDao {
 
     @Query("SELECT * FROM subscriptions where id = :id limit 1")
     fun findSubscriptionById(id : Int): Subscription?
+
+    @Query("SELECT * FROM subscriptions where username = :username")
+    fun findSubsOwnerByUsername(username : String): List<SubscriptionWithOwner>
 
     //Owners
 

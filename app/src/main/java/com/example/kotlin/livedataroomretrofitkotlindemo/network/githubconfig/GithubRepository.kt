@@ -92,6 +92,11 @@ class GithubRepository  {
         else
             dataSubs.value = Resource.loading(null)
 
+        var subsOwner = dao.findSubsOwnerByUsername(username)
+        subsOwner.forEach {
+//            println(it)
+        }
+
         refreshSubscriptions(username)
 
         return dataSubs

@@ -23,7 +23,7 @@ data class Subscription(@PrimaryKey @ColumnInfo(name="id") var id:Int,
                         @ColumnInfo(name="owner_id") var ownerId:Int?,
                         @Ignore var owner : Owner?,
                         @ColumnInfo(name = "name")  var name : String?,
-                        @ColumnInfo(name = "username")  var username : String,
+                        @ColumnInfo(name = "username")  var username : String?,
                         @ColumnInfo(name = "full_name")  var full_name : String?,
                         @ColumnInfo(name = "description")  var description : String?,
                         @ColumnInfo(name = "url")  var  url: String?){
@@ -34,3 +34,8 @@ data class Subscription(@PrimaryKey @ColumnInfo(name="id") var id:Int,
 data class Owner(@PrimaryKey @ColumnInfo(name="id") var id:Int,
                  @ColumnInfo(name = "login")  var login : String?,
                  @ColumnInfo(name = "url")  var url : String?)
+
+data class SubscriptionWithOwner(@Embedded var subscription : Subscription?,
+                                 @Relation(parentColumn = "owner_id", entityColumn = "id", entity=Owner::class) var owner : List<Owner>?){
+    constructor() : this(null, null)
+}
